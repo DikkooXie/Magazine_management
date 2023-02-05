@@ -4,46 +4,46 @@
 #include <stdlib.h>
 #include "tablePrint.h"
 
-typedef struct subscription //µ¥¸ö¶©ÔÄĞÅÏ¢
+typedef struct subscription //å•ä¸ªè®¢é˜…ä¿¡æ¯
 {
-    int uid;//±àºÅ
-    char id[8];//ÔÓÖ¾´úÂë
-    char name[10];//¶©ÔÄ»§Ãû
-    char idnum[20];//Éí·İÖ¤ºÅ
-    int much;//·İÊı
-    float pmoney;//µ¥¼Û
-    float tmoney;//Ğ¡¼Æ
+    int uid;//ç¼–å·
+    char id[8];//æ‚å¿—ä»£ç 
+    char name[10];//è®¢é˜…æˆ·å
+    char idnum[20];//èº«ä»½è¯å·
+    int much;//ä»½æ•°
+    float pmoney;//å•ä»·
+    float tmoney;//å°è®¡
 }sub;
 
-int uid_max = 0;//´æ´¢uidµ±Ç°×î´óÖµ£¬ÒÔÀàÍÆÏÂÒ»¼ÇÂ¼µÄuid
+int uid_max = 0;//å­˜å‚¨uidå½“å‰æœ€å¤§å€¼ï¼Œä»¥ç±»æ¨ä¸‹ä¸€è®°å½•çš„uid
 
-typedef struct Node //½Úµã
+typedef struct Node //èŠ‚ç‚¹
 {
     sub data;
-    struct Node* pNext; //Ö¸ÏòÏÂÒ»¸ö½ÚµãµÄÖ¸Õë
+    struct Node* pNext; //æŒ‡å‘ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆ
 }Node;
 
-Node *g_pHead = NULL;//Í·½Úµã
+Node *g_pHead = NULL;//å¤´èŠ‚ç‚¹
 
 void menu() {
-    //ÉèÖÃ¿ØÖÆÌ¨´°¿Ú
+    //è®¾ç½®æ§åˆ¶å°çª—å£
     char cmd[128];
     sprintf(cmd, "mode con lines=%d cols=%d", WIN_HEIGHT, WIN_WIDTH);
     system(cmd);
-    //´òÓ¡Ò»¸ö±í¸ñ²Ëµ¥
-    system("cls");//Çå¿ÕÆÁÄ»
+    //æ‰“å°ä¸€ä¸ªè¡¨æ ¼èœå•
+    system("cls");//æ¸…ç©ºå±å¹•
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ÔÓÖ¾¶©ÔÄ¹ÜÀíÏµÍ³ ¹¦ÄÜ²Ëµ¥");
+    printTableMidInfo(MENU_WIDTH, "æ‚å¿—è®¢é˜…ç®¡ç†ç³»ç»Ÿ åŠŸèƒ½èœå•");
     printTableMidInfo(MENU_WIDTH, "");
 
     const char* subMenus[] = {
-    "1. ĞÂÔö¶©ÔÄĞÅÏ¢",
-    "2. ĞŞ¸Ä¶©ÔÄĞÅÏ¢",
-    "3. É¾³ı¶©ÔÄĞÅÏ¢",
-    "4. ²éÕÒ¶©ÔÄĞÅÏ¢",
-    "5. Í³¼Æ...",
-    "6. ´òÓ¡...",
-    "0. ÍË³öÏµÍ³   "
+    "1. æ–°å¢è®¢é˜…ä¿¡æ¯",
+    "2. ä¿®æ”¹è®¢é˜…ä¿¡æ¯",
+    "3. åˆ é™¤è®¢é˜…ä¿¡æ¯",
+    "4. æŸ¥æ‰¾è®¢é˜…ä¿¡æ¯",
+    "5. ç»Ÿè®¡...",
+    "6. æ‰“å°...",
+    "0. é€€å‡ºç³»ç»Ÿ   "
     };
 
     int count = sizeof(subMenus) / sizeof(subMenus[0]);
@@ -53,15 +53,15 @@ void menu() {
     printTableMidInfo(MENU_WIDTH, "");
     printTableTail(MENU_WIDTH);
 
-    printMidInfo("ÇëÊäÈëËùĞè¹¦ÄÜ£¨0-6£©£º");
+    printMidInfo("è¯·è¾“å…¥æ‰€éœ€åŠŸèƒ½ï¼ˆ0-6ï¼‰ï¼š");
 }
 
 void pinfo(Node* p)
 {
-    //Í¨¹ı´Ëº¯Êı¿ÉÒÔÊä³ö²ÎÊı½ÚµãµÄÊı¾İĞÅÏ¢
-    printf("©°©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©´\n");
-    printf("©¦  UID  ©¦  ÔÓÖ¾´úÂë  ©¦  ¶©ÔÄ»§Ãû  ©¦      Éí·İÖ¤ºÅ      ©¦¶©ÔÄ·İÊı©¦  µ¥¼Û  ©¦  Ğ¡¼Æ  ©¦\n");
-    printf("©¦%7d©¦%12s©¦%12s©¦%20s©¦%8d©¦%8.2f©¦%8.2f©¦\n",
+    //é€šè¿‡æ­¤å‡½æ•°å¯ä»¥è¾“å‡ºå‚æ•°èŠ‚ç‚¹çš„æ•°æ®ä¿¡æ¯
+    printf("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”\n");
+    printf("â”‚  UID  â”‚  æ‚å¿—ä»£ç   â”‚  è®¢é˜…æˆ·å  â”‚      èº«ä»½è¯å·      â”‚è®¢é˜…ä»½æ•°â”‚  å•ä»·  â”‚  å°è®¡  â”‚\n");
+    printf("â”‚%7dâ”‚%12sâ”‚%12sâ”‚%20sâ”‚%8dâ”‚%8.2fâ”‚%8.2fâ”‚\n",
         p->data.uid,
         p->data.id,
         p->data.name,
@@ -69,20 +69,20 @@ void pinfo(Node* p)
         p->data.much,
         p->data.pmoney,
         p->data.tmoney);
-    printf("©¸©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¼\n");
+    printf("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜\n");
     printf("\n");
 }
 
 bool save()
 {
-    //´Ëº¯ÊıÓÃÓÚ½«ÄÚ´æÖĞµÄĞÅÏ¢±£´æµ½ÎÄ¼ş
+    //æ­¤å‡½æ•°ç”¨äºå°†å†…å­˜ä¸­çš„ä¿¡æ¯ä¿å­˜åˆ°æ–‡ä»¶
 
-    //´ò¿ªÎÄ¼ş
+    //æ‰“å¼€æ–‡ä»¶
     FILE* fp = fopen("data.txt", "w");
     if (fp == NULL)
         return false;
     
-    //±éÀúÁ´±í
+    //éå†é“¾è¡¨
     Node* p = g_pHead;
     while (p != NULL)
     {
@@ -94,29 +94,29 @@ bool save()
         p = p->pNext;
     }
 
-    //¹Ø±ÕÎÄ¼ş
+    //å…³é—­æ–‡ä»¶
     fclose(fp);
     return true;
 }
 
 void read()
 {
-    //´Ëº¯ÊıÓÃÓÚÃ¿´ÎÆô¶¯Ê±×Ô¶¯¶ÁÈ¡ÏÈÇ°Êı¾İ
-    FILE* fp = fopen("data.txt", "r"); //r-Ö»¶Á£¬b-´ò¿ª¶ş½øÖÆÎÄ¼ş
+    //æ­¤å‡½æ•°ç”¨äºæ¯æ¬¡å¯åŠ¨æ—¶è‡ªåŠ¨è¯»å–å…ˆå‰æ•°æ®
+    FILE* fp = fopen("data.txt", "r"); //r-åªè¯»ï¼Œb-æ‰“å¼€äºŒè¿›åˆ¶æ–‡ä»¶
     if (fp == NULL) {
         system("cls");
         printTableHead(MENU_WIDTH+10);
-        printTableMidInfo(MENU_WIDTH+10, "¾¯¸æ£ºÃ»ÓĞ¼ì²âµ½³õÊ¼ÎÄ¼ş£¬½«ĞÂ½¨¿Õ°×Êı¾İ¿ªÊ¼");
+        printTableMidInfo(MENU_WIDTH+10, "è­¦å‘Šï¼šæ²¡æœ‰æ£€æµ‹åˆ°åˆå§‹æ–‡ä»¶ï¼Œå°†æ–°å»ºç©ºç™½æ•°æ®å¼€å§‹");
         printTableTail(MENU_WIDTH+10);
         system("pause");
         return;
     }
 
-    //´´½¨ÁÙÊ±ÅĞ¶Ï½áµã
+    //åˆ›å»ºä¸´æ—¶åˆ¤æ–­ç»“ç‚¹
     sub temp;
-    //¶ÁÒ»´ÎÊı¾İ·ÅÈëÁÙÊ±½áµãÖĞ£¬Èç¹û³É¹¦¶ÁÈë£¬´ú±íÎÄ¼şÃ»ÓĞ¶ÁÍê£¬·´Ö®ÔòÒÑ¶ÁÍê½áÊøÑ­»·
+    //è¯»ä¸€æ¬¡æ•°æ®æ”¾å…¥ä¸´æ—¶ç»“ç‚¹ä¸­ï¼Œå¦‚æœæˆåŠŸè¯»å…¥ï¼Œä»£è¡¨æ–‡ä»¶æ²¡æœ‰è¯»å®Œï¼Œåä¹‹åˆ™å·²è¯»å®Œç»“æŸå¾ªç¯
     while (fread(&temp, sizeof(sub), 1, fp) == 1) {
-        //´´½¨½Úµã
+        //åˆ›å»ºèŠ‚ç‚¹
         Node* pNewNode = (Node*)malloc(sizeof(Node));
         pNewNode->pNext = NULL;
 
@@ -124,9 +124,9 @@ void read()
         if (pNewNode->data.uid >= uid_max)
             uid_max = pNewNode->data.uid;
         
-        //Í·²å·¨
-        if (g_pHead == NULL) //Ô­À´Ê²Ã´¶¼Ã»ÓĞ
-            g_pHead = pNewNode; //½«ĞÂ´´½Úµã×÷ÎªÍ·
+        //å¤´æ’æ³•
+        if (g_pHead == NULL) //åŸæ¥ä»€ä¹ˆéƒ½æ²¡æœ‰
+            g_pHead = pNewNode; //å°†æ–°åˆ›èŠ‚ç‚¹ä½œä¸ºå¤´
         else
         {
             pNewNode->pNext = g_pHead;
@@ -137,16 +137,16 @@ void read()
 
 void del_work(Node* p)
 {
-    //´Ëº¯ÊıÓÃÓÚĞ­ÖúÇı¶¯¡°É¾³ı¶©ÔÄĞÅÏ¢¡±¹¦ÄÜ£¬½øĞĞÉ¾³ıµÄ¾ßÌå²Ù×÷
-    //ÅĞ¶ÏÉ¾³ı½ÚµãÊÇ·ñÊÇÍ·½Úµã
+    //æ­¤å‡½æ•°ç”¨äºååŠ©é©±åŠ¨â€œåˆ é™¤è®¢é˜…ä¿¡æ¯â€åŠŸèƒ½ï¼Œè¿›è¡Œåˆ é™¤çš„å…·ä½“æ“ä½œ
+    //åˆ¤æ–­åˆ é™¤èŠ‚ç‚¹æ˜¯å¦æ˜¯å¤´èŠ‚ç‚¹
     if (p == g_pHead)
     {
-        Node* p1 = g_pHead; //ÏÈ±¸·İÍ·½Úµã
-        g_pHead = g_pHead->pNext;//½«Í·½ÚµãµÄÏÂÒ»½Úµã×÷ÎªÍ·
-        free(p1);//É¾³ı¡°±¸·İµÄÍ·½Úµã¡±£¬¼´Ô­À´ÒªÉ¾³ıµÄ½Úµã
+        Node* p1 = g_pHead; //å…ˆå¤‡ä»½å¤´èŠ‚ç‚¹
+        g_pHead = g_pHead->pNext;//å°†å¤´èŠ‚ç‚¹çš„ä¸‹ä¸€èŠ‚ç‚¹ä½œä¸ºå¤´
+        free(p1);//åˆ é™¤â€œå¤‡ä»½çš„å¤´èŠ‚ç‚¹â€ï¼Œå³åŸæ¥è¦åˆ é™¤çš„èŠ‚ç‚¹
         return;
     }
-    else //²»ÊÇÍ·½Úµã
+    else //ä¸æ˜¯å¤´èŠ‚ç‚¹
     {
         Node* p2;
         p2 = p->pNext;
@@ -158,44 +158,44 @@ void del_work(Node* p)
 
 void add()
 {
-    //´Ëº¯ÊıÇı¶¯Ìí¼Ó¶©ÔÄĞÅÏ¢¹¦ÄÜ
+    //æ­¤å‡½æ•°é©±åŠ¨æ·»åŠ è®¢é˜…ä¿¡æ¯åŠŸèƒ½
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < ĞÂÔö¶©ÔÄĞÅÏ¢ >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < æ–°å¢è®¢é˜…ä¿¡æ¯ >");
     printTableTail(MENU_WIDTH);
-    //´´½¨½Úµã
+    //åˆ›å»ºèŠ‚ç‚¹
     Node* pNewNode = (Node*)malloc(sizeof(Node));
     pNewNode->pNext = NULL;
     
-    //Í·²å·¨
-    if (g_pHead == NULL) //Ô­À´Ê²Ã´¶¼Ã»ÓĞ
-        g_pHead = pNewNode; //½«ĞÂ´´½Úµã×÷ÎªÍ·
+    //å¤´æ’æ³•
+    if (g_pHead == NULL) //åŸæ¥ä»€ä¹ˆéƒ½æ²¡æœ‰
+        g_pHead = pNewNode; //å°†æ–°åˆ›èŠ‚ç‚¹ä½œä¸ºå¤´
     else
     {
         pNewNode->pNext = g_pHead;
         g_pHead = pNewNode;
     }
 
-    //ĞÅÏ¢Â¼Èë
-    printMidInfo("ÇëÊäÈë < ÔÓÖ¾´úÂë > :");
+    //ä¿¡æ¯å½•å…¥
+    printMidInfo("è¯·è¾“å…¥ < æ‚å¿—ä»£ç  > :");
     scanf("%s", pNewNode->data.id);
-    printMidInfo("ÇëÊäÈë < ¶©ÔÄ»§Ãû > :");
+    printMidInfo("è¯·è¾“å…¥ < è®¢é˜…æˆ·å > :");
     scanf("%s", pNewNode->data.name);
-    printMidInfo("ÇëÊäÈë < Éí·İÖ¤ºÅ > :");
+    printMidInfo("è¯·è¾“å…¥ < èº«ä»½è¯å· > :");
     scanf("%s", pNewNode->data.idnum);
-    printMidInfo("ÇëÊäÈë < ¶©ÔÄ·İÊı > :");
+    printMidInfo("è¯·è¾“å…¥ < è®¢é˜…ä»½æ•° > :");
     scanf("%d", &pNewNode->data.much);
-    printMidInfo("ÇëÊäÈë < ³öÊÛµ¥¼Û > :");
+    printMidInfo("è¯·è¾“å…¥ < å‡ºå”®å•ä»· > :");
     scanf("%f", &pNewNode->data.pmoney);
     pNewNode->data.tmoney = pNewNode->data.much * pNewNode->data.pmoney;
-    printMidInfo("ÒÑ¼ÆËã < Ğ¡¼Æ > : ");
+    printMidInfo("å·²è®¡ç®— < å°è®¡ > : ");
     printf("%.2f\n", pNewNode->data.tmoney);
     
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ÇëÈ·ÈÏĞÅÏ¢ÊÇ·ñÕıÈ·...");
-    printTableMidInfo(MENU_WIDTH, "È·ÈÏÂ¼Èë Y/y");
-    printTableMidInfo(MENU_WIDTH, "ÖØĞÂÂ¼Èë N/n");
-    printTableMidInfo(MENU_WIDTH, "È·ÈÏ²¢¼ÌĞøÂ¼Èë... R/r");
+    printTableMidInfo(MENU_WIDTH, "è¯·ç¡®è®¤ä¿¡æ¯æ˜¯å¦æ­£ç¡®...");
+    printTableMidInfo(MENU_WIDTH, "ç¡®è®¤å½•å…¥ Y/y");
+    printTableMidInfo(MENU_WIDTH, "é‡æ–°å½•å…¥ N/n");
+    printTableMidInfo(MENU_WIDTH, "ç¡®è®¤å¹¶ç»§ç»­å½•å…¥... R/r");
     printTableTail(MENU_WIDTH);
     while (1)
     {
@@ -207,7 +207,7 @@ void add()
             if (save())
             {
                 printTableHead(MENU_WIDTH);
-                printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢Â¼Èë³É¹¦!");
+                printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯å½•å…¥æˆåŠŸ!");
                 printTableTail(MENU_WIDTH);
                 printf("\n");
                 system("pause");
@@ -215,7 +215,7 @@ void add()
             else
             {
                 printTableHead(MENU_WIDTH);
-                printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢Â¼ÈëÊ§°Ü x_x");
+                printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯å½•å…¥å¤±è´¥ x_x");
                 printTableTail(MENU_WIDTH);
                 printf("\n");
                 system("pause");
@@ -233,28 +233,28 @@ void add()
             add(); break;
         }
         else
-            printMidInfo("Ö¸Áî´íÎó£¬ÇëÖØĞÂÊäÈë£¨È·ÈÏ Y/y¡¢·µ»ØN/n£©£º \n");
+            printMidInfo("æŒ‡ä»¤é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼ˆç¡®è®¤ Y/yã€è¿”å›N/nï¼‰ï¼š \n");
     }
 
 }
 
 void modify_menu(Node* p)
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°ĞŞ¸Ä¶©ÔÄĞÅÏ¢¡±¹¦ÄÜ£¬ÓÃÓÚÊä³öĞŞ¸Ä²Ëµ¥
-    system("cls");//Çå¿ÕÆÁÄ»
-    printf("ÄúÕıÔÚ¸ü¸ÄµÄ¼ÇÂ¼ÏÖÓĞÖµ£º\n");
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œä¿®æ”¹è®¢é˜…ä¿¡æ¯â€åŠŸèƒ½ï¼Œç”¨äºè¾“å‡ºä¿®æ”¹èœå•
+    system("cls");//æ¸…ç©ºå±å¹•
+    printf("æ‚¨æ­£åœ¨æ›´æ”¹çš„è®°å½•ç°æœ‰å€¼ï¼š\n");
     pinfo(p);
     printf("\n");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ÄúÕıÔÚĞŞ¸Ä¶©ÔÄĞÅÏ¢...");
+    printTableMidInfo(MENU_WIDTH, "æ‚¨æ­£åœ¨ä¿®æ”¹è®¢é˜…ä¿¡æ¯...");
     printTableMidInfo(MENU_WIDTH, "");
     const char* subMenus[] = {
-    "1. ĞŞ¸Ä < ÔÓÖ¾´úÂë >",
-    "2. ĞŞ¸Ä < ¶©ÔÄ»§Ãû >",
-    "3. ĞŞ¸Ä < Éí·İÖ¤ºÅ >",
-    "4. ĞŞ¸Ä < ¶©ÔÄ·İÊı >",
-    "5. ĞŞ¸Ä < ¶©ÔÄµ¥¼Û >",
-    "0. ĞŞ¸ÄÍê³É   "
+    "1. ä¿®æ”¹ < æ‚å¿—ä»£ç  >",
+    "2. ä¿®æ”¹ < è®¢é˜…æˆ·å >",
+    "3. ä¿®æ”¹ < èº«ä»½è¯å· >",
+    "4. ä¿®æ”¹ < è®¢é˜…ä»½æ•° >",
+    "5. ä¿®æ”¹ < è®¢é˜…å•ä»· >",
+    "0. ä¿®æ”¹å®Œæˆ   "
     };
 
     int count = sizeof(subMenus) / sizeof(subMenus[0]);
@@ -264,30 +264,30 @@ void modify_menu(Node* p)
     printTableMidInfo(MENU_WIDTH, "");
     printTableTail(MENU_WIDTH);
 
-    printMidInfo("ÇëÊäÈëËùĞè¹¦ÄÜ£¨0-5£©");
+    printMidInfo("è¯·è¾“å…¥æ‰€éœ€åŠŸèƒ½ï¼ˆ0-5ï¼‰");
 }
 
 void modi_work(Node* p, const char* type1, void* type2)
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°ĞŞ¸Ä¶©ÔÄĞÅÏ¢¡±¹¦ÄÜ£¬ÓÃÓÚĞŞ¸Ä¾ßÌåĞÅÏ¢¡£
-    system("cls");//Çå¿ÕÆÁÄ»
-    printf("ÄúÕıÔÚ¸ü¸ÄµÄ¼ÇÂ¼ÏÖÓĞÖµ£º\n");
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œä¿®æ”¹è®¢é˜…ä¿¡æ¯â€åŠŸèƒ½ï¼Œç”¨äºä¿®æ”¹å…·ä½“ä¿¡æ¯ã€‚
+    system("cls");//æ¸…ç©ºå±å¹•
+    printf("æ‚¨æ­£åœ¨æ›´æ”¹çš„è®°å½•ç°æœ‰å€¼ï¼š\n");
     pinfo(p);
     printf("\n");
     printTableHead(MENU_WIDTH);
     char info1[40];
-    sprintf(info1, "µ±Ç°²Ù×÷ < ĞŞ¸Ä %s >", type1);
+    sprintf(info1, "å½“å‰æ“ä½œ < ä¿®æ”¹ %s >", type1);
     printTableMidInfo(MENU_WIDTH, info1);
     printTableTail(MENU_WIDTH);
     char info2[40];
-    sprintf(info2, "ÇëÊäÈë < ĞŞ¸ÄºóµÄ %s > :", type1);
+    sprintf(info2, "è¯·è¾“å…¥ < ä¿®æ”¹åçš„ %s > :", type1);
     printMidInfo(info2);
-    if (type1 == "¶©ÔÄ·İÊı") 
+    if (type1 == "è®¢é˜…ä»½æ•°") 
     {
         scanf("%d", type2);
         p->data.tmoney = p->data.much * p->data.pmoney;
     }
-    else if (type1 == "¶©ÔÄµ¥¼Û")
+    else if (type1 == "è®¢é˜…å•ä»·")
     {
         scanf("%f", type2);
         p->data.tmoney = p->data.much * p->data.pmoney;
@@ -299,10 +299,10 @@ void modi_work(Node* p, const char* type1, void* type2)
     if (save())
     {
         printTableHead(MENU_WIDTH);
-        printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢ĞŞ¸Ä²¢±£´æ³É¹¦!");
+        printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯ä¿®æ”¹å¹¶ä¿å­˜æˆåŠŸ!");
         printTableTail(MENU_WIDTH);
         printf("\n");
-        printf("ÄúĞŞ¸ÄÍê³ÉºóµÄ¼ÇÂ¼Öµ£º\n");
+        printf("æ‚¨ä¿®æ”¹å®Œæˆåçš„è®°å½•å€¼ï¼š\n");
         pinfo(p);
         printf("\n");
         system("pause");
@@ -310,7 +310,7 @@ void modi_work(Node* p, const char* type1, void* type2)
     else
     {
         printTableHead(MENU_WIDTH);
-        printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢ĞŞ¸ÄÊ§°Ü£¨Î´±£´æ£© x_x");
+        printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯ä¿®æ”¹å¤±è´¥ï¼ˆæœªä¿å­˜ï¼‰ x_x");
         printTableTail(MENU_WIDTH);
         printf("\n");
         system("pause");
@@ -319,29 +319,29 @@ void modi_work(Node* p, const char* type1, void* type2)
 
 void modify()
 {
-    //´Ëº¯ÊıÇı¶¯ĞŞ¸Ä¶©ÔÄĞÅÏ¢¹¦ÄÜ
+    //æ­¤å‡½æ•°é©±åŠ¨ä¿®æ”¹è®¢é˜…ä¿¡æ¯åŠŸèƒ½
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < ĞŞ¸Ä¶©ÔÄĞÅÏ¢ >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < ä¿®æ”¹è®¢é˜…ä¿¡æ¯ >");
     printTableTail(MENU_WIDTH);
     
-    //Í¨¹ı¼ÇÂ¼µÄuid²éÕÒÒªĞŞ¸ÄµÄ¼ÇÂ¼
+    //é€šè¿‡è®°å½•çš„uidæŸ¥æ‰¾è¦ä¿®æ”¹çš„è®°å½•
     int modi_uid;
-    printMidInfo("ÇëÊäÈë < ËùĞèĞŞ¸ÄµÄ¼ÇÂ¼µÄ UID > :");
+    printMidInfo("è¯·è¾“å…¥ < æ‰€éœ€ä¿®æ”¹çš„è®°å½•çš„ UID > :");
     scanf("%d", &modi_uid);
 
     bool find_ok = false;
     Node* p = g_pHead;
-    while (p != NULL) //´ÓÍ·¿ªÊ¼²éÕÒuid
+    while (p != NULL) //ä»å¤´å¼€å§‹æŸ¥æ‰¾uid
     {
         if (p->data.uid == modi_uid)
         {
             find_ok = true;
             pinfo(p);
             printTableHead(MENU_WIDTH);
-            printTableMidInfo(MENU_WIDTH, "ÇëÈ·ÈÏÕâÊÇ·ñÊÇÄúÒªĞŞ¸ÄµÄ¼ÇÂ¼...");
-            printTableMidInfo(MENU_WIDTH, "È·ÈÏ Y/y");
-            printTableMidInfo(MENU_WIDTH, "·µ»Ø N/n");
+            printTableMidInfo(MENU_WIDTH, "è¯·ç¡®è®¤è¿™æ˜¯å¦æ˜¯æ‚¨è¦ä¿®æ”¹çš„è®°å½•...");
+            printTableMidInfo(MENU_WIDTH, "ç¡®è®¤ Y/y");
+            printTableMidInfo(MENU_WIDTH, "è¿”å› N/n");
             printTableTail(MENU_WIDTH);
             while (1)
             {
@@ -353,7 +353,7 @@ void modify()
                     modify(); return;
                 }
                 else
-                    printMidInfo("Ö¸Áî´íÎó£¬ÇëÖØĞÂÊäÈë£¨È·ÈÏ Y/y¡¢·µ»ØN/n£©£º \n");
+                    printMidInfo("æŒ‡ä»¤é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼ˆç¡®è®¤ Y/yã€è¿”å›N/nï¼‰ï¼š \n");
             }
             while (1)
             {
@@ -361,11 +361,11 @@ void modify()
                 char ch = getch();
                 switch (ch)
                 {
-                case '1': modi_work(p, "ÔÓÖ¾´úÂë",&p->data.id); break; //ÔÓÖ¾´úÂë
-                case '2': modi_work(p, "¶©ÔÄ»§Ãû", &p->data.name); break; //¶©ÔÄ»§Ãû
-                case '3': modi_work(p, "Éí·İÖ¤ºÅ", &p->data.idnum); break; //Éí·İÖ¤ºÅ
-                case '4': modi_work(p, "¶©ÔÄ·İÊı", &p->data.much); break; //¶©ÔÄ·İÊı
-                case '5': modi_work(p, "¶©ÔÄµ¥¼Û", &p->data.pmoney); break; //¶©ÔÄµ¥¼Û
+                case '1': modi_work(p, "æ‚å¿—ä»£ç ",&p->data.id); break; //æ‚å¿—ä»£ç 
+                case '2': modi_work(p, "è®¢é˜…æˆ·å", &p->data.name); break; //è®¢é˜…æˆ·å
+                case '3': modi_work(p, "èº«ä»½è¯å·", &p->data.idnum); break; //èº«ä»½è¯å·
+                case '4': modi_work(p, "è®¢é˜…ä»½æ•°", &p->data.much); break; //è®¢é˜…ä»½æ•°
+                case '5': modi_work(p, "è®¢é˜…å•ä»·", &p->data.pmoney); break; //è®¢é˜…å•ä»·
                 default: return;
                 }
             }
@@ -375,7 +375,7 @@ void modify()
     if (!find_ok)
     {
         printTableHead(MENU_WIDTH);
-        printTableMidInfo(MENU_WIDTH, "´íÎó£ºÎŞ·¨Í¨¹ı´ËUIDÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+        printTableMidInfo(MENU_WIDTH, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤UIDæ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
         printTableTail(MENU_WIDTH);
         system("pause");
     }
@@ -383,29 +383,29 @@ void modify()
 
 void del()
 {
-    //´Ëº¯ÊıÇı¶¯É¾³ı¶©ÔÄĞÅÏ¢¹¦ÄÜ
+    //æ­¤å‡½æ•°é©±åŠ¨åˆ é™¤è®¢é˜…ä¿¡æ¯åŠŸèƒ½
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < É¾³ı¶©ÔÄĞÅÏ¢ >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < åˆ é™¤è®¢é˜…ä¿¡æ¯ >");
     printTableTail(MENU_WIDTH);
 
-    //Í¨¹ı¼ÇÂ¼µÄuid²éÕÒÒªĞŞ¸ÄµÄ¼ÇÂ¼
+    //é€šè¿‡è®°å½•çš„uidæŸ¥æ‰¾è¦ä¿®æ”¹çš„è®°å½•
     int modi_uid;
-    printMidInfo("ÇëÊäÈë < ËùĞèĞŞ¸ÄµÄ¼ÇÂ¼µÄ UID > :");
+    printMidInfo("è¯·è¾“å…¥ < æ‰€éœ€ä¿®æ”¹çš„è®°å½•çš„ UID > :");
     scanf("%d", &modi_uid);
 
     bool find_ok = false;
     Node* p = g_pHead;
-    while (p->pNext != NULL) //´ÓÍ·¿ªÊ¼²éÕÒuid
+    while (p->pNext != NULL) //ä»å¤´å¼€å§‹æŸ¥æ‰¾uid
     {
         if (p->pNext->data.uid == modi_uid || p->data.uid == modi_uid)
         {
             find_ok = true;
             pinfo(p);
             printTableHead(MENU_WIDTH);
-            printTableMidInfo(MENU_WIDTH, "ÇëÈ·ÈÏÕâÊÇ·ñÊÇÄúÒªÉ¾³ıµÄ¼ÇÂ¼...");
-            printTableMidInfo(MENU_WIDTH, "È·ÈÏ Y/y");
-            printTableMidInfo(MENU_WIDTH, "·µ»Ø N/n");
+            printTableMidInfo(MENU_WIDTH, "è¯·ç¡®è®¤è¿™æ˜¯å¦æ˜¯æ‚¨è¦åˆ é™¤çš„è®°å½•...");
+            printTableMidInfo(MENU_WIDTH, "ç¡®è®¤ Y/y");
+            printTableMidInfo(MENU_WIDTH, "è¿”å› N/n");
             printTableTail(MENU_WIDTH);
             while (1)
             {
@@ -417,7 +417,7 @@ void del()
                     if (save())
                     {
                         printTableHead(MENU_WIDTH);
-                        printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢É¾³ı²¢±£´æ³É¹¦!");
+                        printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯åˆ é™¤å¹¶ä¿å­˜æˆåŠŸ!");
                         printTableTail(MENU_WIDTH);
                         printf("\n");
                         system("pause");
@@ -425,7 +425,7 @@ void del()
                     else
                     {
                         printTableHead(MENU_WIDTH+10);
-                        printTableMidInfo(MENU_WIDTH+10, "ĞÅÏ¢É¾³ı³É¹¦µ«±£´æÊ§°Ü x_x");
+                        printTableMidInfo(MENU_WIDTH+10, "ä¿¡æ¯åˆ é™¤æˆåŠŸä½†ä¿å­˜å¤±è´¥ x_x");
                         printTableTail(MENU_WIDTH+10);
                         printf("\n");
                         system("pause");
@@ -437,7 +437,7 @@ void del()
                     return;
                 }
                 else
-                    printMidInfo("Ö¸Áî´íÎó£¬ÇëÖØĞÂÊäÈë£¨È·ÈÏ Y/y¡¢·µ»ØN/n£©£º \n");
+                    printMidInfo("æŒ‡ä»¤é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼ˆç¡®è®¤ Y/yã€è¿”å›N/nï¼‰ï¼š \n");
             }
         }
         p = p->pNext;
@@ -445,7 +445,7 @@ void del()
     if (!find_ok)
     {
         printTableHead(MENU_WIDTH);
-        printTableMidInfo(MENU_WIDTH, "´íÎó£ºÎŞ·¨Í¨¹ı´ËUIDÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+        printTableMidInfo(MENU_WIDTH, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤UIDæ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
         printTableTail(MENU_WIDTH);
         system("pause");
     }
@@ -453,16 +453,16 @@ void del()
 
 void find_menu()
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°²éÕÒ¶©ÔÄĞÅÏ¢¡±¹¦ÄÜ£¬ÓÃÓÚÊä³ö²éÕÒ·½Ê½²Ëµ¥
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œæŸ¥æ‰¾è®¢é˜…ä¿¡æ¯â€åŠŸèƒ½ï¼Œç”¨äºè¾“å‡ºæŸ¥æ‰¾æ–¹å¼èœå•
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ÇëÑ¡Ôñ²éÕÒ·½Ê½...");
+    printTableMidInfo(MENU_WIDTH, "è¯·é€‰æ‹©æŸ¥æ‰¾æ–¹å¼...");
     printTableMidInfo(MENU_WIDTH, "");
     const char* subMenus[] = {
-    "1. Í¨¹ı < ¼ÇÂ¼UID > ²éÕÒ",
-    "2. Í¨¹ı < ÔÓÖ¾´úÂë > ²éÕÒ",
-    "3. Í¨¹ı < ¶©ÔÄ»§Ãû > ²éÕÒ",
-    "4. Í¨¹ı < Éí·İÖ¤ºÅ > ²éÕÒ",
-    "0. ½áÊø²éÕÒ   "
+    "1. é€šè¿‡ < è®°å½•UID > æŸ¥æ‰¾",
+    "2. é€šè¿‡ < æ‚å¿—ä»£ç  > æŸ¥æ‰¾",
+    "3. é€šè¿‡ < è®¢é˜…æˆ·å > æŸ¥æ‰¾",
+    "4. é€šè¿‡ < èº«ä»½è¯å· > æŸ¥æ‰¾",
+    "0. ç»“æŸæŸ¥æ‰¾   "
     };
 
     int count = sizeof(subMenus) / sizeof(subMenus[0]);
@@ -472,35 +472,35 @@ void find_menu()
     printTableMidInfo(MENU_WIDTH, "");
     printTableTail(MENU_WIDTH);
 
-    printMidInfo("ÇëÊäÈëËùĞè¹¦ÄÜ£¨0-4£©");
+    printMidInfo("è¯·è¾“å…¥æ‰€éœ€åŠŸèƒ½ï¼ˆ0-4ï¼‰");
 }
 
 void find_work(const char* type1)
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°²éÕÒ¶©ÔÄĞÅÏ¢¡±¹¦ÄÜ£¬ÓÃÓÚ½øĞĞ²éÕÒ¹¤×÷
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œæŸ¥æ‰¾è®¢é˜…ä¿¡æ¯â€åŠŸèƒ½ï¼Œç”¨äºè¿›è¡ŒæŸ¥æ‰¾å·¥ä½œ
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < ²éÕÒ¶©ÔÄĞÅÏ¢ >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < æŸ¥æ‰¾è®¢é˜…ä¿¡æ¯ >");
     printTableTail(MENU_WIDTH);
 
-    //Í¨¹ı¼ÇÂ¼µÄuid²éÕÒÒªĞŞ¸ÄµÄ¼ÇÂ¼
+    //é€šè¿‡è®°å½•çš„uidæŸ¥æ‰¾è¦ä¿®æ”¹çš„è®°å½•
     int modi_uid;
     char info1[50];
-    sprintf(info1, "ÇëÊäÈë < ËùĞè²éÕÒµÄ¼ÇÂ¼µÄ %s > :", type1);
+    sprintf(info1, "è¯·è¾“å…¥ < æ‰€éœ€æŸ¥æ‰¾çš„è®°å½•çš„ %s > :", type1);
     printMidInfo(info1);
 
     int temp_uid; char temp_char[20]; bool find_ok = false;
-    if (type1 == "UID") //Í¨¹ıUID²éÕÒ
+    if (type1 == "UID") //é€šè¿‡UIDæŸ¥æ‰¾
     {
         scanf("%d", &temp_uid);
         Node* p = g_pHead;
-        while (p != NULL) //´ÓÍ·¿ªÊ¼²éÕÒ
+        while (p != NULL) //ä»å¤´å¼€å§‹æŸ¥æ‰¾
         {
             if (p->data.uid == temp_uid)
             {
                 find_ok = true;
                 system("cls");
-                printf("ÒÔÏÂÊÇ²éÕÒ³öµÄ¼ÇÂ¼£º\n");
+                printf("ä»¥ä¸‹æ˜¯æŸ¥æ‰¾å‡ºçš„è®°å½•ï¼š\n");
                 pinfo(p);
                 system("pause");
                 return;
@@ -510,13 +510,13 @@ void find_work(const char* type1)
         if (!find_ok)
         {
             printTableHead(MENU_WIDTH);
-            printTableMidInfo(MENU_WIDTH, "´íÎó£ºÎŞ·¨Í¨¹ı´ËUIDÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+            printTableMidInfo(MENU_WIDTH, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤UIDæ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
             printTableTail(MENU_WIDTH);
             system("pause");
             return;
         }
     }
-    else if (type1 == "ÔÓÖ¾´úÂë")
+    else if (type1 == "æ‚å¿—ä»£ç ")
     {
         scanf("%s", temp_char);
         Node* p = g_pHead;
@@ -527,12 +527,12 @@ void find_work(const char* type1)
                 if (!find_ok)
                 {
                     system("cls");
-                    printf("ÒÔÏÂÊÇ²éÕÒ³öµÄ¼ÇÂ¼£º\n");
-                    printf("©°©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©´\n");
-                    printf("©¦  UID  ©¦  ÔÓÖ¾´úÂë  ©¦  ¶©ÔÄ»§Ãû  ©¦      Éí·İÖ¤ºÅ      ©¦¶©ÔÄ·İÊı©¦  µ¥¼Û  ©¦  Ğ¡¼Æ  ©¦\n");
+                    printf("ä»¥ä¸‹æ˜¯æŸ¥æ‰¾å‡ºçš„è®°å½•ï¼š\n");
+                    printf("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”\n");
+                    printf("â”‚  UID  â”‚  æ‚å¿—ä»£ç   â”‚  è®¢é˜…æˆ·å  â”‚      èº«ä»½è¯å·      â”‚è®¢é˜…ä»½æ•°â”‚  å•ä»·  â”‚  å°è®¡  â”‚\n");
                 }
                 find_ok = true;
-                printf("©¦%7d©¦%12s©¦%12s©¦%20s©¦%8d©¦%8.2f©¦%8.2f©¦\n",
+                printf("â”‚%7dâ”‚%12sâ”‚%12sâ”‚%20sâ”‚%8dâ”‚%8.2fâ”‚%8.2fâ”‚\n",
                     p->data.uid,
                     p->data.id,
                     p->data.name,
@@ -547,19 +547,19 @@ void find_work(const char* type1)
         if (!find_ok)
         {
             printTableHead(MENU_WIDTH + 10);
-            printTableMidInfo(MENU_WIDTH+10, "´íÎó£ºÎŞ·¨Í¨¹ı´ËÔÓÖ¾´úÂëÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+            printTableMidInfo(MENU_WIDTH+10, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤æ‚å¿—ä»£ç æ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
             printTableTail(MENU_WIDTH + 10);
             system("pause");
             return;
         }
         else
         {
-            printf("©¸©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¼\n");
+            printf("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜\n");
             system("pause");
             return;
         }
     }
-    else if (type1 == "¶©ÔÄ»§Ãû")
+    else if (type1 == "è®¢é˜…æˆ·å")
     {
         scanf("%s", temp_char);
         Node* p = g_pHead;
@@ -569,11 +569,11 @@ void find_work(const char* type1)
             {
                 if (!find_ok)
                 {
-                    printf("©°©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©´\n");
-                    printf("©¦  UID  ©¦  ÔÓÖ¾´úÂë  ©¦  ¶©ÔÄ»§Ãû  ©¦      Éí·İÖ¤ºÅ      ©¦¶©ÔÄ·İÊı©¦  µ¥¼Û  ©¦  Ğ¡¼Æ  ©¦\n");
+                    printf("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”\n");
+                    printf("â”‚  UID  â”‚  æ‚å¿—ä»£ç   â”‚  è®¢é˜…æˆ·å  â”‚      èº«ä»½è¯å·      â”‚è®¢é˜…ä»½æ•°â”‚  å•ä»·  â”‚  å°è®¡  â”‚\n");
                 }
                 find_ok = true;
-                printf("©¦%7d©¦%12s©¦%12s©¦%20s©¦%8d©¦%8.2f©¦%8.2f©¦\n",
+                printf("â”‚%7dâ”‚%12sâ”‚%12sâ”‚%20sâ”‚%8dâ”‚%8.2fâ”‚%8.2fâ”‚\n",
                     p->data.uid,
                     p->data.id,
                     p->data.name,
@@ -588,19 +588,19 @@ void find_work(const char* type1)
         if (!find_ok)
         {
             printTableHead(MENU_WIDTH + 10);
-            printTableMidInfo(MENU_WIDTH+10, "´íÎó£ºÎŞ·¨Í¨¹ı´Ë¶©ÔÄ»§ÃûÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+            printTableMidInfo(MENU_WIDTH+10, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤è®¢é˜…æˆ·åæ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
             printTableTail(MENU_WIDTH + 10);
             system("pause");
             return;
         }
         else
         {
-            printf("©¸©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¼\n");
+            printf("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜\n");
             system("pause");
             return;
         }
     }  
-    else if (type1 == "Éí·İÖ¤ºÅ")
+    else if (type1 == "èº«ä»½è¯å·")
     {
         scanf("%s", temp_char);
         Node* p = g_pHead;
@@ -610,11 +610,11 @@ void find_work(const char* type1)
             {
                 if (!find_ok)
                 {
-                    printf("©°©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©´\n");
-                    printf("©¦  UID  ©¦  ÔÓÖ¾´úÂë  ©¦  ¶©ÔÄ»§Ãû  ©¦      Éí·İÖ¤ºÅ      ©¦¶©ÔÄ·İÊı©¦  µ¥¼Û  ©¦  Ğ¡¼Æ  ©¦\n");
+                    printf("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”\n");
+                    printf("â”‚  UID  â”‚  æ‚å¿—ä»£ç   â”‚  è®¢é˜…æˆ·å  â”‚      èº«ä»½è¯å·      â”‚è®¢é˜…ä»½æ•°â”‚  å•ä»·  â”‚  å°è®¡  â”‚\n");
                 }
                 find_ok = true;
-                printf("©¦%7d©¦%12s©¦%12s©¦%20s©¦%8d©¦%8.2f©¦%8.2f©¦\n",
+                printf("â”‚%7dâ”‚%12sâ”‚%12sâ”‚%20sâ”‚%8dâ”‚%8.2fâ”‚%8.2fâ”‚\n",
                     p->data.uid,
                     p->data.id,
                     p->data.name,
@@ -629,14 +629,14 @@ void find_work(const char* type1)
         if (!find_ok)
         {
             printTableHead(MENU_WIDTH + 10);
-            printTableMidInfo(MENU_WIDTH+10, "´íÎó£ºÎŞ·¨Í¨¹ı´ËÉí·İÖ¤ºÅÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+            printTableMidInfo(MENU_WIDTH+10, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤èº«ä»½è¯å·æ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
             printTableTail(MENU_WIDTH + 10);
             system("pause");
             return;
         }
         else
         {
-            printf("©¸©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¼\n");
+            printf("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜\n");
             system("pause");
             return;
         }
@@ -645,10 +645,10 @@ void find_work(const char* type1)
 
 void find()
 {
-    //´Ëº¯ÊıÇı¶¯²éÕÒ¶©ÔÄĞÅÏ¢¹¦ÄÜ
+    //æ­¤å‡½æ•°é©±åŠ¨æŸ¥æ‰¾è®¢é˜…ä¿¡æ¯åŠŸèƒ½
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < ²éÕÒ¶©ÔÄĞÅÏ¢ >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < æŸ¥æ‰¾è®¢é˜…ä¿¡æ¯ >");
     printTableTail(MENU_WIDTH);
     printf("\n");
     find_menu();
@@ -657,10 +657,10 @@ void find()
         char ch = getch();
         switch (ch)
         {
-        case '1': find_work("UID"); return; //¼ÇÂ¼UID
-        case '2': find_work("ÔÓÖ¾´úÂë"); return; //ÔÓÖ¾´úÂë
-        case '3': find_work("¶©ÔÄ»§Ãû"); return; //¶©ÔÄ»§Ãû
-        case '4': find_work("Éí·İÖ¤ºÅ"); return; //Éí·İÖ¤ºÅ
+        case '1': find_work("UID"); return; //è®°å½•UID
+        case '2': find_work("æ‚å¿—ä»£ç "); return; //æ‚å¿—ä»£ç 
+        case '3': find_work("è®¢é˜…æˆ·å"); return; //è®¢é˜…æˆ·å
+        case '4': find_work("èº«ä»½è¯å·"); return; //èº«ä»½è¯å·
         default: return;
         }
     }
@@ -668,15 +668,15 @@ void find()
 
 void analyse_menu()
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°Í³¼Æ...¡±¹¦ÄÜ£¬ÓÃÓÚÊä³öÍ³¼Æ·½Ê½²Ëµ¥
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œç»Ÿè®¡...â€åŠŸèƒ½ï¼Œç”¨äºè¾“å‡ºç»Ÿè®¡æ–¹å¼èœå•
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ÇëÑ¡ÔñÍ³¼Æ·½Ê½...");
+    printTableMidInfo(MENU_WIDTH, "è¯·é€‰æ‹©ç»Ÿè®¡æ–¹å¼...");
     printTableMidInfo(MENU_WIDTH, "");
     const char* subMenus[] = {
-    "1. Í³¼Æ < µ±Ç°ÔÓÖ¾ÏúÁ¿ >",
-    "2. Í³¼Æ < ÓÃ»§¹ºÂòĞÅÏ¢ >",
-    "3. Í³¼Æ < µ±Ç°ÊÕÈëĞÅÏ¢ >",
-    "0. ½áÊøÍ³¼Æ   "
+    "1. ç»Ÿè®¡ < å½“å‰æ‚å¿—é”€é‡ >",
+    "2. ç»Ÿè®¡ < ç”¨æˆ·è´­ä¹°ä¿¡æ¯ >",
+    "3. ç»Ÿè®¡ < å½“å‰æ”¶å…¥ä¿¡æ¯ >",
+    "0. ç»“æŸç»Ÿè®¡   "
     };
 
     int count = sizeof(subMenus) / sizeof(subMenus[0]);
@@ -686,23 +686,23 @@ void analyse_menu()
     printTableMidInfo(MENU_WIDTH, "");
     printTableTail(MENU_WIDTH);
 
-    printMidInfo("ÇëÊäÈëËùĞè¹¦ÄÜ£¨0-3£©");
+    printMidInfo("è¯·è¾“å…¥æ‰€éœ€åŠŸèƒ½ï¼ˆ0-3ï¼‰");
 }
 
 void analyse_work_magzine()
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°Í³¼Æ¡±¹¦ÄÜ£¬ÓÃÓÚÍ³¼ÆÔÓÖ¾ÏúÁ¿
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œç»Ÿè®¡â€åŠŸèƒ½ï¼Œç”¨äºç»Ÿè®¡æ‚å¿—é”€é‡
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < Í³¼ÆÔÓÖ¾ÏúÁ¿... >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < ç»Ÿè®¡æ‚å¿—é”€é‡... >");
     printTableTail(MENU_WIDTH);
 
     char temp[20]; bool find_ok = false;
     int much=0; float income=0;
-    printMidInfo("ÇëÊäÈëËùĞèÍ³¼ÆµÄ < ÔÓÖ¾´úÂë > :");
+    printMidInfo("è¯·è¾“å…¥æ‰€éœ€ç»Ÿè®¡çš„ < æ‚å¿—ä»£ç  > :");
     scanf("%s", temp);
     Node* p = g_pHead;
-    while (p != NULL) //´ÓÍ·¿ªÊ¼²éÕÒ
+    while (p != NULL) //ä»å¤´å¼€å§‹æŸ¥æ‰¾
     {
         if (strcmp(p->data.id, temp) == 0)
         {
@@ -715,7 +715,7 @@ void analyse_work_magzine()
     if (!find_ok)
     {
         printTableHead(MENU_WIDTH+10);
-        printTableMidInfo(MENU_WIDTH+10, "´íÎó£ºÎŞ·¨Í¨¹ı´ËÔÓÖ¾´úÂëÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+        printTableMidInfo(MENU_WIDTH+10, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤æ‚å¿—ä»£ç æ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
         printTableTail(MENU_WIDTH+10);
         system("pause");
         return;
@@ -724,14 +724,14 @@ void analyse_work_magzine()
     {
         printTableHead(MENU_WIDTH);
         char info1[50];
-        sprintf(info1, "ÔÓÖ¾´úÂë < %s > µÄÍ³¼ÆĞÅÏ¢£º", temp);
+        sprintf(info1, "æ‚å¿—ä»£ç  < %s > çš„ç»Ÿè®¡ä¿¡æ¯ï¼š", temp);
         printTableMidInfo(MENU_WIDTH, info1);
         printTableMidInfo(MENU_WIDTH, "");
         char info2[50];
-        sprintf(info2, "¶©ÔÄ·İÊı ×Ü¼Æ£º %d·İ", much);
+        sprintf(info2, "è®¢é˜…ä»½æ•° æ€»è®¡ï¼š %dä»½", much);
         printTableMidInfo(MENU_WIDTH, info2);
         char info3[50];
-        sprintf(info3, "¶©ÔÄÊÕÈë ×Ü¼Æ£º %.2fÔª", income);
+        sprintf(info3, "è®¢é˜…æ”¶å…¥ æ€»è®¡ï¼š %.2få…ƒ", income);
         printTableMidInfo(MENU_WIDTH, info3);
         printTableTail(MENU_WIDTH);
         system("pause");
@@ -741,18 +741,18 @@ void analyse_work_magzine()
 
 void analyse_work_user()
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°Í³¼Æ¡±¹¦ÄÜ£¬ÓÃÓÚÍ³¼ÆÓÃ»§Ö§³öĞÅÏ¢
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œç»Ÿè®¡â€åŠŸèƒ½ï¼Œç”¨äºç»Ÿè®¡ç”¨æˆ·æ”¯å‡ºä¿¡æ¯
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < Í³¼ÆÓÃ»§Ö§³öĞÅÏ¢... >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < ç»Ÿè®¡ç”¨æˆ·æ”¯å‡ºä¿¡æ¯... >");
     printTableTail(MENU_WIDTH);
 
     char temp[20],name[10]; bool find_ok = false;
     float pay = 0;
-    printMidInfo("ÇëÊäÈëËùĞèÍ³¼ÆµÄÓÃ»§µÄ < Éí·İÖ¤ºÅ > :");
+    printMidInfo("è¯·è¾“å…¥æ‰€éœ€ç»Ÿè®¡çš„ç”¨æˆ·çš„ < èº«ä»½è¯å· > :");
     scanf("%s", temp);
     Node* p = g_pHead;
-    while (p != NULL) //´ÓÍ·¿ªÊ¼²éÕÒ
+    while (p != NULL) //ä»å¤´å¼€å§‹æŸ¥æ‰¾
     {
         if (strcmp(p->data.idnum, temp) == 0)
         {
@@ -765,7 +765,7 @@ void analyse_work_user()
     if (!find_ok)
     {
         printTableHead(MENU_WIDTH + 10);
-        printTableMidInfo(MENU_WIDTH + 10, "´íÎó£ºÎŞ·¨Í¨¹ı´ËÉí·İÖ¤ºÅÕÒµ½¶ÔÓ¦¼ÇÂ¼£¬Çë²éÕıºóÖØÊÔ£¡");
+        printTableMidInfo(MENU_WIDTH + 10, "é”™è¯¯ï¼šæ— æ³•é€šè¿‡æ­¤èº«ä»½è¯å·æ‰¾åˆ°å¯¹åº”è®°å½•ï¼Œè¯·æŸ¥æ­£åé‡è¯•ï¼");
         printTableTail(MENU_WIDTH + 10);
         system("pause");
         return;
@@ -774,14 +774,14 @@ void analyse_work_user()
     {
         printTableHead(MENU_WIDTH);
         char info1[50];
-        sprintf(info1, "¶©ÔÄÓÃ»§ < %s > µÄÍ³¼ÆĞÅÏ¢£º", name);
+        sprintf(info1, "è®¢é˜…ç”¨æˆ· < %s > çš„ç»Ÿè®¡ä¿¡æ¯ï¼š", name);
         printTableMidInfo(MENU_WIDTH, info1);
         printTableMidInfo(MENU_WIDTH, "");
         char info2[50];
-        sprintf(info2, "ÓÃ»§ Éí·İÖ¤ºÅ£º %s", temp);
+        sprintf(info2, "ç”¨æˆ· èº«ä»½è¯å·ï¼š %s", temp);
         printTableMidInfo(MENU_WIDTH, info2);
         char info3[50];
-        sprintf(info3, "Ö§³ö½ğ¶î ×Ü¼Æ£º %.2fÔª", pay);
+        sprintf(info3, "æ”¯å‡ºé‡‘é¢ æ€»è®¡ï¼š %.2få…ƒ", pay);
         printTableMidInfo(MENU_WIDTH, info3);
         printTableTail(MENU_WIDTH);
         system("pause");
@@ -791,14 +791,14 @@ void analyse_work_user()
 
 void analyse_work_income()
 {
-    //´Ëº¯ÊıĞ­ÖúÇı¶¯¡°Í³¼Æ¡±¹¦ÄÜ£¬ÓÃÓÚÍ³¼ÆÓÃ»§Ö§³öĞÅÏ¢
+    //æ­¤å‡½æ•°ååŠ©é©±åŠ¨â€œç»Ÿè®¡â€åŠŸèƒ½ï¼Œç”¨äºç»Ÿè®¡ç”¨æˆ·æ”¯å‡ºä¿¡æ¯
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < Í³¼Æµ±Ç°ÊÕÈëĞÅÏ¢... >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < ç»Ÿè®¡å½“å‰æ”¶å…¥ä¿¡æ¯... >");
     printTableTail(MENU_WIDTH);
     printf("\n");
     float income = 0;
-    //±éÀúÁ´±í
+    //éå†é“¾è¡¨
     Node* p = g_pHead;
     while (p != NULL)
     {
@@ -806,10 +806,10 @@ void analyse_work_income()
         p = p->pNext;
     }
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°ÊÕÈëĞÅÏ¢£º");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ”¶å…¥ä¿¡æ¯ï¼š");
     printTableMidInfo(MENU_WIDTH, "");
     char info[50];
-    sprintf(info, "µ±Ç°ÊÕÈë ×Ü¼Æ£º %.2fÔª", income);
+    sprintf(info, "å½“å‰æ”¶å…¥ æ€»è®¡ï¼š %.2få…ƒ", income);
     printTableMidInfo(MENU_WIDTH, info);
     printTableTail(MENU_WIDTH);
     system("pause");
@@ -818,10 +818,10 @@ void analyse_work_income()
 
 void analyse()
 {
-    //´Ëº¯ÊıÇı¶¯Í³¼Æ..¹¦ÄÜ
+    //æ­¤å‡½æ•°é©±åŠ¨ç»Ÿè®¡..åŠŸèƒ½
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < Í³¼Æ... >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < ç»Ÿè®¡... >");
     printTableTail(MENU_WIDTH);
     printf("\n");
     analyse_menu();
@@ -830,9 +830,9 @@ void analyse()
         char ch = getch();
         switch (ch)
         {
-        case '1': analyse_work_magzine(); return; //ÔÓÖ¾ÏúÁ¿
-        case '2': analyse_work_user(); return; //ÓÃ»§Ö§³öĞÅÏ¢
-        case '3': analyse_work_income(); return; //µ±Ç°ÊÕÈëĞÅÏ¢
+        case '1': analyse_work_magzine(); return; //æ‚å¿—é”€é‡
+        case '2': analyse_work_user(); return; //ç”¨æˆ·æ”¯å‡ºä¿¡æ¯
+        case '3': analyse_work_income(); return; //å½“å‰æ”¶å…¥ä¿¡æ¯
         default: return;
         }
     }
@@ -840,20 +840,20 @@ void analyse()
 
 void printInfo()
 {
-    //´Ëº¯ÊıÇı¶¯´òÓ¡...¹¦ÄÜ
+    //æ­¤å‡½æ•°é©±åŠ¨æ‰“å°...åŠŸèƒ½
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "µ±Ç°²Ù×÷ < ´òÓ¡... >");
+    printTableMidInfo(MENU_WIDTH, "å½“å‰æ“ä½œ < æ‰“å°... >");
     printTableTail(MENU_WIDTH);
     printf("\n");
-    printf("©°©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©´\n");
-    printf("©¦  UID  ©¦  ÔÓÖ¾´úÂë  ©¦  ¶©ÔÄ»§Ãû  ©¦      Éí·İÖ¤ºÅ      ©¦¶©ÔÄ·İÊı©¦  µ¥¼Û  ©¦  Ğ¡¼Æ  ©¦\n");
+    printf("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”\n");
+    printf("â”‚  UID  â”‚  æ‚å¿—ä»£ç   â”‚  è®¢é˜…æˆ·å  â”‚      èº«ä»½è¯å·      â”‚è®¢é˜…ä»½æ•°â”‚  å•ä»·  â”‚  å°è®¡  â”‚\n");
     
-    //±éÀúÁ´±í
+    //éå†é“¾è¡¨
     Node* p = g_pHead;
     while (p != NULL)
     {
-        printf("©¦%7d©¦%12s©¦%12s©¦%20s©¦%8d©¦%8.2f©¦%8.2f©¦\n", 
+        printf("â”‚%7dâ”‚%12sâ”‚%12sâ”‚%20sâ”‚%8dâ”‚%8.2fâ”‚%8.2fâ”‚\n", 
             p->data.uid,
             p->data.id, 
             p->data.name, 
@@ -864,7 +864,7 @@ void printInfo()
 
         p = p->pNext;
     }
-    printf("©¸©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¼\n");
+    printf("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜\n");
     system("pause");
 }
 
@@ -872,8 +872,8 @@ void exit_normal()
 {
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢±£´æ³É¹¦£¡ÏµÍ³Õı³£ÍË³ö...");
-    printTableMidInfo(MENU_WIDTH, "¸ĞĞ»ÄúµÄÊ¹ÓÃ =w=");
+    printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯ä¿å­˜æˆåŠŸï¼ç³»ç»Ÿæ­£å¸¸é€€å‡º...");
+    printTableMidInfo(MENU_WIDTH, "æ„Ÿè°¢æ‚¨çš„ä½¿ç”¨ =w=");
     printTableTail(MENU_WIDTH);
     exit(0);
 }
@@ -882,8 +882,8 @@ void exit_erro()
 {
     system("cls");
     printTableHead(MENU_WIDTH);
-    printTableMidInfo(MENU_WIDTH, "ĞÅÏ¢±£´æÊ§°Ü£¡Êı¾İ½«»Øµ½ÉÏÒ»´ÎÕı³£±£´æ...");
-    printTableMidInfo(MENU_WIDTH, "¸ĞĞ»ÄúµÄÊ¹ÓÃ =w=");
+    printTableMidInfo(MENU_WIDTH, "ä¿¡æ¯ä¿å­˜å¤±è´¥ï¼æ•°æ®å°†å›åˆ°ä¸Šä¸€æ¬¡æ­£å¸¸ä¿å­˜...");
+    printTableMidInfo(MENU_WIDTH, "æ„Ÿè°¢æ‚¨çš„ä½¿ç”¨ =w=");
     printTableTail(MENU_WIDTH);
     exit(0);
 }
