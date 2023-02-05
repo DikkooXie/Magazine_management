@@ -1,8 +1,8 @@
 #pragma once
 
-// ´°¿Ú¿í¶È
+// Â´Â°Â¿ÃšÂ¿Ã­Â¶Ãˆ
 #define WIN_WIDTH 80
-// ´°¿Ú¸ß¶È
+// Â´Â°Â¿ÃšÂ¸ÃŸÂ¶Ãˆ
 #define WIN_HEIGHT 25
 
 #define TABLE_WIDTH 78
