@@ -5,9 +5,9 @@
 void printTableHead(int tableWidth) {
 	int margin = (WIN_WIDTH - tableWidth) / 2;
 	for (int i = 0; i < margin; i++) printf(" ");
-	printf("©°");
-	for (int i = 0; i < tableWidth - 2; i++)printf("©¤");
-	printf("©´\n");
+	printf("Â©Â°");
+	for (int i = 0; i < tableWidth - 2; i++)printf("Â©Â¤");
+	printf("Â©Â´\n");
 }
 
 
@@ -15,9 +15,9 @@ void printTableHead(int tableWidth) {
 void printTableTail(int tableWidth) {
 	int margin = (WIN_WIDTH - tableWidth) / 2;
 	for (int i = 0; i < margin; i++) printf(" ");
-	printf("©¸");
-	for (int i = 0; i < tableWidth - 2; i++)printf("©¤");
-	printf("©¼\n");
+	printf("Â©Â¸");
+	for (int i = 0; i < tableWidth - 2; i++)printf("Â©Â¤");
+	printf("Â©Â¼\n");
 }
 
 
@@ -28,7 +28,7 @@ void printTableRow(int tableWidth, char cols[][COL_LEN_MAX], int n) {
 	int colWidth = (tableWidth - (n + 1)) / n;
 
 	for (int i = 0; i < n; i++) {
-		printf("©¦");
+		printf("Â©Â¦");
 
 		int leftSpan = (colWidth - strlen(cols[i])) / 2;
 		int rightSpan = colWidth - leftSpan - strlen(cols[i]);
@@ -38,7 +38,7 @@ void printTableRow(int tableWidth, char cols[][COL_LEN_MAX], int n) {
 		for (int j = 0; j < rightSpan; j++) printf(" ");
 	}
 
-	printf("©¦\n");
+	printf("Â©Â¦\n");
 }
 
 
@@ -47,17 +47,17 @@ void printTableHead(int tableWidth, int cols) {
 	int spanLen = (tableWidth - (cols + 1)) / cols;
 	for (int i = 0; i < margin; i++) printf(" ");
 
-	printf("©°");
+	printf("Â©Â°");
 	for (int i = 0; i < cols; i++) {
 		for (int j = 0; j < spanLen; j++) {
-			printf("©¤");
+			printf("Â©Â¤");
 		}
 
 		if (i < cols - 1) {
-			printf("©Ð");
+			printf("Â©Ã");
 		}
 		else {
-			printf("©´");
+			printf("Â©Â´");
 		}
 	}
 	printf("\n");
@@ -68,18 +68,18 @@ void printTableTail(int tableWidth, int cols) {
 	int spanLen = (tableWidth - (cols + 1)) / cols;
 	for (int i = 0; i < margin; i++) printf(" ");
 
-	//©¸©¤©Ø©¤©¼
-	printf("©¸");
+	//Â©Â¸Â©Â¤Â©Ã˜Â©Â¤Â©Â¼
+	printf("Â©Â¸");
 	for (int i = 0; i < cols; i++) {
 		for (int j = 0; j < spanLen; j++) {
-			printf("©¤");
+			printf("Â©Â¤");
 		}
 
 		if (i < cols - 1) {
-			printf("©Ø");
+			printf("Â©Ã˜");
 		}
 		else {
-			printf("©¼");
+			printf("Â©Â¼");
 		}
 	}
 	printf("\n");
@@ -90,17 +90,17 @@ void printTableMidLine(int tableWidth, int cols) {
 	int spanLen = (tableWidth - (cols + 1)) / cols;
 	for (int i = 0; i < margin; i++) printf(" ");
 
-	printf("©À");
+	printf("Â©Ã€");
 	for (int i = 0; i < cols; i++) {
 		for (int j = 0; j < spanLen; j++) {
-			printf("©¤");
+			printf("Â©Â¤");
 		}
 
 		if (i < cols - 1) {
-			printf("©à");
+			printf("Â©Ã ");
 		}
 		else {
-			printf("©È");
+			printf("Â©Ãˆ");
 		}
 	}
 	printf("\n");
@@ -110,7 +110,7 @@ void printTableMidLine(int tableWidth, int cols) {
 void printTableMidInfo(int tableWidth, const char* str) {
 	int margin = (WIN_WIDTH - tableWidth) / 2;
 	for (int i = 0; i < margin; i++) printf(" ");
-	printf("©¦");
+	printf("Â©Â¦");
 
 	int len1 = (tableWidth - 2 - strlen(str)) / 2;
 	for (int i = 0; i < len1; i++) printf(" ");
@@ -120,7 +120,7 @@ void printTableMidInfo(int tableWidth, const char* str) {
 	int len2 = tableWidth - 2 - len1 - strlen(str);
 	for (int i = 0; i < len2; i++) printf(" ");
 
-	printf("©¦\n");
+	printf("Â©Â¦\n");
 }
 
 void printMidInfo(const char* str) {
